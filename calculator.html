@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Італійська Нерухомість: Калькулятор Витрат</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .card { background: white; border-radius: 12px; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 p-4 md:p-8">
+
+    <div class="max-w-4xl mx-auto">
+        <header class="text-center mb-10">
+            <!-- БЛОК ЛОГОТИПА -->
+            <div class="flex justify-center mb-6">
+                <!-- Сюди підставиться ваше фото 1000229735.jpg. Якщо файлу немає поруч, покажеться іконка будинку -->
+                <img src="1000229735.jpg" 
+                     alt="Логотип Агенції" 
+                     class="h-28 object-contain rounded-lg"
+                     onerror="this.onerror=null; this.src='https://cdn-icons-png.flaticon.com/512/2169/2169223.png';">
+            </div>
+            
+            <h1 class="text-3xl md:text-4xl font-bold text-blue-900 mb-2">🇮🇹 Калькулятор витрат на житло</h1>
+            <p class="text-gray-600">Дізнайтеся реальну вартість вашої італійської мрії</p>
+        </header>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- ЛІВА ПАНЕЛЬ: Ввід даних -->
+            <div class="card p-6 border-t-4 border-blue-600">
+                <h2 class="text-xl font-semibold mb-4 flex items-center gap-2">⚙️ Параметри угоди</h2>
+                
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Ринкова ціна об'єкта (€)</label>
+                        <input type="number" id="marketPrice" value="100000" class="w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-500 outline-none">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Кадастрова вартість (Valore Catastale) (€)</label>
+                        <input type="number" id="cadastralValue" value="60000" class="w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-500 outline-none">
+                        <p class="text-xs text-gray-500 mt-1">Зазвичай на 30-50% нижча за ринкову.</p>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Продавець</label>
+                        <select id="sellerType" class="w-full p-2 border rounded-md outline-none">
+                            <option value="privato">Приватна особа (Privato)</option>
+                            <option value="builder">Забудовник (Costruttore / IVA)</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Статус нерухомості</label>
+                        <select id="houseStatus" class="w-full p-2 border rounded-md outline-none">
+                            <option value="prima">Prima Casa (Перша оселя)</option>
+                            <option value="seconda">Seconda Casa (Друга оселя)</option>
+                            <option value="luxury">Люкс (A1/A8/A9) - тільки для забудовників</option>
+                        </select>
+                    </div>
+
+                    <div class="flex items-center gap-2 pt-2">
+                        <input type="checkbox" id="hasMortgage" class="w-4 h-4">
+                        <label for="hasMortgage" class="text-sm font-medium">Потрібна іпотека (Mutuo)</label>
+                    </div>
+
+                    <div class="flex items-center gap-2">
+                        <input type="checkbox" id="hasAgency" checked class="w-4 h-4">
+                        <label for="hasAgency" class="text-sm font-medium">Купівля через агентство (3%)</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ПРАВА ПАНЕЛЬ: Результати -->
+            <div class="card p-6 border-t-4 border-green-600">
+                <h2 class="text-xl font-semibold mb-4 flex items-center gap-2">📊 Фінальний розрахунок</h2>
+                
+                <div class="space-y-3">
+                    <div class="flex justify-between border-b pb-2">
+                        <span>Ціна угоди:</span>
+                        <span class="font-bold" id="resPrice">€100,000</span>
+                    </div>
+                    <div class="flex justify-between border-b pb-2 text-blue-700">
+                        <span>Податки (Imposte/IVA):</span>
+                        <span class="font-bold" id="resTaxes">€1,200</span>
+                    </div>
+                    <div class="flex justify-between border-b pb-2">
+                        <span>Нотаріус:</span>
+                        <span class="font-bold" id="resNotary">€2,000</span>
+                    </div>
+                    <div class="flex justify-between border-b pb-2">
+                        <span>Агентські (3%):</span>
+                        <span class="font-bold" id="resAgency">€3,000</span>
+                    </div>
+                    <div class="flex justify-between border-b pb-2 text-gray-500">
+                        <span>Тех. перевірки (APE/Perizia):</span>
+                        <span class="font-bold" id="resTechnical">€800</span>
+                    </div>
+                    <div class="flex justify-between pt-4 text-xl font-bold text-red-600">
+                        <span>РАЗОМ ДО СПЛАТИ:</span>
+                        <span id="resTotal">€107,000</span>
+                    </div>
+                    <div class="text-right text-sm font-medium text-gray-500 italic">
+                        Націнка до ціни: <span id="resPercentage">+7.0%</span>
+                    </div>
+                </div>
+
+                <div class="mt-6 p-4 bg-yellow-50 rounded-lg text-sm border border-yellow-200">
+                    <p><strong>💡 Український куточок:</strong> Якщо ви не є резидентом Італії (не маєте Permesso), податок рахуватиметься як для <i>Seconda Casa</i>. Також не забудьте про витрати на присяжний переклад документів (~€300).</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Додаткові деталі -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+            <div class="card p-4 bg-blue-50 border-l-4 border-blue-400">
+                <h3 class="font-bold text-blue-900 mb-1">🖋 Нотаріус</h3>
+                <p class="text-sm text-gray-600 italic">Витрати залежать від наявності іпотеки. У середньому €1.5k–€3k за акт купівлі.</p>
+            </div>
+            <div class="card p-4 bg-orange-50 border-l-4 border-orange-400">
+                <h3 class="font-bold text-orange-900 mb-1">🛠 Ремонт & Побут</h3>
+                <p class="text-sm text-gray-600 italic">Підключення світла/газу: €150-450. Косметичний ремонт: від €150/м².</p>
+            </div>
+            <div class="card p-4 bg-purple-50 border-l-4 border-purple-400">
+                <h3 class="font-bold text-purple-900 mb-1">📑 Щорічні</h3>
+                <p class="text-sm text-gray-600 italic">IMU (тільки для 2-ї оселі) та TARI (сміття) - орієнтовно €500–1000 на рік.</p>
+            </div>
+        </div>
+
+        <footer class="mt-12 text-center text-gray-400 text-sm">
+            <p>* Розрахунок є орієнтовним. Точні цифри надає нотаріус після перевірки документів.</p>
+        </footer>
+    </div>
+
+    <script>
+        const marketPriceInput = document.getElementById('marketPrice');
+        const cadastralValueInput = document.getElementById('cadastralValue');
+        const sellerTypeSelect = document.getElementById('sellerType');
+        const houseStatusSelect = document.getElementById('houseStatus');
+        const mortgageCheck = document.getElementById('hasMortgage');
+        const agencyCheck = document.getElementById('hasAgency');
+
+        const formatEuro = (val) => new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(val);
+
+        function calculate() {
+            const price = parseFloat(marketPriceInput.value) || 0;
+            const cadastral = parseFloat(cadastralValueInput.value) || 0;
+            const seller = sellerTypeSelect.value;
+            const status = houseStatusSelect.value;
+            const hasMortgage = mortgageCheck.checked;
+            const hasAgency = agencyCheck.checked;
+
+            let tax = 0;
+            let fixedFees = 0;
+
+            if (seller === 'privato') {
+                // Registro based on cadastral
+                if (status === 'prima') tax = cadastral * 0.02;
+                else tax = cadastral * 0.09;
+                fixedFees = 50 + 50; // ipotecaria + catastale
+            } else {
+                // IVA based on market price
+                if (status === 'prima') tax = price * 0.04;
+                else if (status === 'luxury') tax = price * 0.22;
+                else tax = price * 0.10;
+                fixedFees = 200 + 200 + 200; // ipo + cata + reg
+            }
+
+            let notary = 2000;
+            if (hasMortgage) notary += 600; // Extra for mortgage deed
+
+            let agency = hasAgency ? Math.max(2500, price * 0.03) : 0;
+            let technical = 800; // Static estimate for check + APE
+
+            const totalExtras = tax + fixedFees + notary + agency + technical;
+            const finalTotal = price + totalExtras;
+            const percentage = ((totalExtras / price) * 100).toFixed(1);
+
+            // Update UI
+            document.getElementById('resPrice').innerText = formatEuro(price);
+            document.getElementById('resTaxes').innerText = formatEuro(tax + fixedFees);
+            document.getElementById('resNotary').innerText = formatEuro(notary);
+            document.getElementById('resAgency').innerText = formatEuro(agency);
+            document.getElementById('resTechnical').innerText = formatEuro(technical);
+            document.getElementById('resTotal').innerText = formatEuro(finalTotal);
+            document.getElementById('resPercentage').innerText = `+${percentage}%`;
+        }
+
+        [marketPriceInput, cadastralValueInput, sellerTypeSelect, houseStatusSelect, mortgageCheck, agencyCheck].forEach(el => {
+            el.addEventListener('input', calculate);
+        });
+
+        calculate();
+    </script>
+</body>
+</html>
